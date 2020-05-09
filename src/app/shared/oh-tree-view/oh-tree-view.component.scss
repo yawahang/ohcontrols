@@ -1,0 +1,119 @@
+oh-tree-view {
+  .check-all {
+    .mat-checkbox-layout {
+      .mat-checkbox-inner-container {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .filter-buttons {
+    font-family: "Courier New", Courier, monospace;
+
+    .mat-button-toggle-group {
+      background: #f7f7f7;
+      .mat-button-toggle-disabled {
+        background: none !important;
+      }
+
+      .mat-button-toggle {
+        color: #000;
+        .node-search {
+          background: transparent;
+        }
+      }
+
+      .mat-button-toggle:nth-child(1) {
+        background: #b0b0b0cc;
+        .mat-button-toggle-button {
+          .mat-button-toggle-label-content {
+            padding: 0px;
+            .mat-icon {
+              font-weight: 600;
+              height: 24px !important;
+              width: 30px !important;
+            }
+          }
+        }
+      }
+
+      .mat-button-toggle:nth-child(2) {
+        .mat-button-toggle-button {
+          .mat-button-toggle-label-content {
+            padding-left: 4px;
+            padding-right: 5px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            .mat-icon {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .search-node {
+    input[type="text"] {
+      width: auto;
+      border: none;
+      border-bottom: 1px solid #968e8e;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-bottom: 1px solid #7b7b7b;
+    }
+
+    .mat-icon {
+      cursor: pointer;
+      font-size: 14px !important;
+      margin-left: -18px;
+      margin-bottom: -12px;
+    }
+  }
+
+  .oh-tree-wrapper {
+    height: calc(100vh - 280px);
+    overflow-y: scroll;
+
+    .oh-tree {
+      margin: 0;
+      list-style-type: none;
+      padding-left: 0;
+
+      .mat-icon {
+        position: relative;
+        float: left;
+        top: -1px;
+        margin-right: 5px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .show-node {
+        display: block;
+        line-height: 35px;
+      }
+
+      .hide-node {
+        display: none;
+      }
+    }
+  }
+
+  .collapsible-node {
+    margin-left: 20px;
+  }
+
+  .toggle-node-show {
+    display: block;
+  }
+
+  .toggle-node-hide {
+    display: none;
+  }
+}

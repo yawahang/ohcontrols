@@ -1,0 +1,23 @@
+.oh-rating-picker-wrapper {
+  width: auto;
+
+  .oh-rating-star-wrapper {
+    font-size: medium;
+
+    .oh-star:hover {
+      cursor: pointer;
+    }
+  }
+
+  .horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

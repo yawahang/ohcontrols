@@ -1,0 +1,635 @@
+<mat-tab-group>
+    <!-- DATE PICKER -->
+    <mat-tab label="DATETIME PICKER">
+
+        <!-- VALUE -->
+        <mat-card style="background: #e1e9f1;">
+            VALUE: {{dateTimeValue | json}}
+        </mat-card>
+        <!-- VALUE -->
+
+        <!-- CONTROL -->
+        <mat-card>
+            <oh-date-picker [config]="datePickerConfig" (valueChange)="valueChange($event)">
+            </oh-date-picker>
+        </mat-card>
+        <!-- CONTROL -->
+
+        <!-- CONFIG -->
+        <mat-card>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Control Type</mat-label>
+                        <mat-select [(ngModel)]="type" (selectionChange)="reSetDateConfig()" matTooltip="Control Type">
+                            <mat-option [value]="'date-time'">Date Time</mat-option>
+                            <mat-option [value]="'date'">Date</mat-option>
+                            <mat-option [value]="'time'">Time</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Calendar Type</mat-label>
+                        <mat-select [(ngModel)]="isInline" (selectionChange)="reSetDateConfig()"
+                            matTooltip="Calendar Type">
+                            <mat-option [value]="true">Inline Calendar</mat-option>
+                            <mat-option [value]="false">Toggle Calendar</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Picker Type</mat-label>
+                        <mat-select [(ngModel)]="isRange" (selectionChange)="reSetDateConfig()"
+                            matTooltip="Date Picker Type">
+                            <mat-option [value]="false">Single</mat-option>
+                            <mat-option [value]="true">Range</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Control Align</mat-label>
+                        <mat-select [(ngModel)]="controlAlign" (selectionChange)="reSetDateConfig()"
+                            matTooltip="Control Align for Range mode">
+                            <mat-option [value]="'horizontal'">Horizontal</mat-option>
+                            <mat-option [value]="'vertical'">Vertical</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Hour Format</mat-label>
+                        <mat-select [(ngModel)]="hourFormat" (selectionChange)="reSetDateConfig()"
+                            matTooltip="Hour Format">
+                            <mat-option [value]="12">12</mat-option>
+                            <mat-option [value]="24">24</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Placeholder" [(ngModel)]="placeholder" (change)="reSetDateConfig()"
+                            matTooltip="Placeholder">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Width" [(ngModel)]="widthDate" (change)="reSetDateConfig()"
+                            matTooltip="Eg: 90px, 50pt, 2in, auto">
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>StartView (StartDate)</mat-label>
+                        <mat-select [(ngModel)]="startView.start" (selectionChange)="reSetDateConfig()"
+                            matTooltip="StartView For StartDate">
+                            <mat-option [value]="'month'">Month</mat-option>
+                            <mat-option [value]="'year'">Year</mat-option>
+                            <mat-option [value]="'multi-year'">Multi Year</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>StartView (EndDate)</mat-label>
+                        <mat-select disabled="{{!isRange}}" (selectionChange)="reSetDateConfig()"
+                            [(ngModel)]="startView.end" matTooltip="StartView For EndDate">
+                            <mat-option [value]="'month'">Month</mat-option>
+                            <mat-option [value]="'year'">Year</mat-option>
+                            <mat-option [value]="'multi-year'">Multi Year</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="defaultDateStart" placeholder="DefaultDate (StartDate)"
+                            matTooltip="DefaultDate For StartDate"
+                            (dateChange)="dateConfigChange($event,'defaultDate.start')">
+                        <mat-datepicker-toggle matSuffix [for]="defaultDateStart"></mat-datepicker-toggle>
+                        <mat-datepicker #defaultDateStart></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput disabled="{{!isRange}}" [matDatepicker]="defaultDateEnd"
+                            placeholder="DefaultDate (EndDate)" matTooltip="DefaultDate For EndDate"
+                            (dateChange)="dateConfigChange($event,'defaultDate.end')">
+                        <mat-datepicker-toggle matSuffix [for]="defaultDateEnd"></mat-datepicker-toggle>
+                        <mat-datepicker #defaultDateEnd></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="DefaultTime (StartDate)" matTooltip="Eg: 10:30:12 AM"
+                            [(ngModel)]="defaultTime.start" (change)="reSetDateConfig()">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput disabled="{{!isRange}}" placeholder="DefaultTime (EndDate)"
+                            matTooltip="Eg: 10:30:12 AM" [(ngModel)]="defaultTime.end" (change)="reSetDateConfig()">
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="startAtStart" placeholder="Date StartAt (StartDate)"
+                            matTooltip="Date StartAt For StartDate"
+                            (dateChange)="dateConfigChange($event,'startAt.start')">
+                        <mat-datepicker-toggle matSuffix [for]="startAtStart"></mat-datepicker-toggle>
+                        <mat-datepicker #startAtStart></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput disabled="{{!isRange}}" [matDatepicker]="startAtEnd"
+                            matTooltip="Date StartAt For EndDate" placeholder="Date StartAt (EndDate)"
+                            (dateChange)="dateConfigChange($event,'startAt.end')">
+                        <mat-datepicker-toggle matSuffix [for]="startAtEnd"></mat-datepicker-toggle>
+                        <mat-datepicker #startAtEnd></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="minDateStart" placeholder="MinDate (StartDate)"
+                            matTooltip="Minimum Date For StartDate"
+                            (dateChange)="dateConfigChange($event,'minDate.start')">
+                        <mat-datepicker-toggle matSuffix [for]="minDateStart"></mat-datepicker-toggle>
+                        <mat-datepicker #minDateStart></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput disabled="{{!isRange}}" [matDatepicker]="minDateEnd"
+                            matTooltip="Minimum Date For EndDate" placeholder="MinDate (EndDate)"
+                            (dateChange)="dateConfigChange($event,'minDate.end')">
+                        <mat-datepicker-toggle matSuffix [for]="minDateEnd"></mat-datepicker-toggle>
+                        <mat-datepicker #minDateEnd></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="maxDateStart" placeholder="MaxDate (StartDate)"
+                            matTooltip="Maximum Date For StartDate"
+                            (dateChange)="dateConfigChange($event,'maxDate.start')">
+                        <mat-datepicker-toggle matSuffix [for]="maxDateStart"></mat-datepicker-toggle>
+                        <mat-datepicker #maxDateStart></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput disabled="{{!isRange}}" [matDatepicker]="maxDateEnd"
+                            matTooltip="Maximum Date For EndDate" placeholder="MaxDate (EndDate)"
+                            (dateChange)="dateConfigChange($event,'maxDate.end')">
+                        <mat-datepicker-toggle matSuffix [for]="maxDateEnd"></mat-datepicker-toggle>
+                        <mat-datepicker #maxDateEnd></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="required" (change)="dateConfigChange($event)">
+                        Date Picker Required</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="disabled" (change)="dateConfigChange($event)">
+                        Disable Date Picker</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="dateDisabled" (change)="dateConfigChange($event)">
+                        Disable Date</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="timeDisabled" (change)="dateConfigChange($event)">
+                        Disable Time</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="disableMeridian" (change)="dateConfigChange($event)">
+                        Disable Meridian</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="dateInputDisabled" (change)="dateConfigChange($event)">
+                        Disable Date Textbox</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="datePickerPopupDisabled" (change)="dateConfigChange($event)">
+                        Disable Date Calender</mat-checkbox>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="datePickerIconDisabled"
+                        (change)="dateConfigChange($event,'datePickerIconDisabled')">
+                        Disable Date Calender Icon</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="disableHour" (change)="dateConfigChange($event)">
+                        Disable Hour</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="disableMinute" (change)="dateConfigChange($event)">
+                        Disable Minute</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="disableSeconds" (change)="dateConfigChange($event)">
+                        Disable Seconds</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="hideHour" (change)="dateConfigChange($event)">
+                        Hide Hour</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="hideMinute" (change)="dateConfigChange($event)">
+                        Hide Minute</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="hideSeconds" (change)="dateConfigChange($event)">
+                        Hide Seconds</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="hideMeridian" (change)="dateConfigChange($event)">
+                        Hide Meridian</mat-checkbox>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Sun" (change)="dayDisableChange($event)">
+                        Disable Sunday</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Mon" (change)="dayDisableChange($event)">
+                        Disable Monday</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Tue" (change)="dayDisableChange($event)">
+                        Disable Tuesday</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Wed" (change)="dayDisableChange($event)">
+                        Disable Wenesday</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Thu" (change)="dayDisableChange($event)">
+                        Disable Thrusday</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Fri" (change)="dayDisableChange($event)">
+                        Disable Friday</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox name="Sat" (change)="dayDisableChange($event)">
+                        Disable Saturday</mat-checkbox>
+                </div>
+
+            </div>
+
+        </mat-card>
+        <!-- CONFIG -->
+    </mat-tab>
+    <!-- DATE PICKER -->
+
+    <!-- TREE VIEW -->
+    <mat-tab label="TREE VIEW">
+
+        <!-- VALUE -->
+        <mat-card style="background: #e1e9f1;">
+            VALUE: {{nodeIdList.join(',')}}
+        </mat-card>
+        <!-- VALUE -->
+
+        <!-- CONFIG -->
+        <mat-card>
+
+            <mat-checkbox [(ngModel)]="expanded" (change)="treeConfigChange($event)">Expanded By Default
+            </mat-checkbox>
+
+            <mat-checkbox [(ngModel)]="searchable" (change)="treeConfigChange($event)">Enable Search
+            </mat-checkbox>
+
+        </mat-card>
+        <!-- CONFIG -->
+
+        <!-- CONTROL -->
+        <mat-card>
+            <oh-tree-view [data]="treeData" [config]="treeViewConfig" (valueChange)="treeViewChange($event)">
+            </oh-tree-view>
+        </mat-card>
+        <!-- CONTROL -->
+
+    </mat-tab>
+    <!-- TREE VIEW -->
+
+    <!-- RATING PICKER -->
+    <mat-tab label="RATING PICKER">
+
+        <!-- VALUE -->
+        <mat-card style="background: #e1e9f1;">
+            VALUE: <b>{{ratingValue}}</b> stars out of <b>{{starsCount}}</b> stars.
+        </mat-card>
+        <!-- VALUE -->
+
+        <!-- CONFIG -->
+        <mat-card>
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput type="number" placeholder="Stars Count" [(ngModel)]="starsCount"
+                            (change)="ratingPickerConfigChange($event)" matTooltip="Stars Count">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Default Value" [(ngModel)]="defaultValue"
+                            (change)="ratingPickerConfigChange($event)" matTooltip="Default Value">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="returnDefaultValue" (change)="ratingPickerConfigChange($event)">Return
+                        Default Value
+                    </mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="allowHalf" (change)="ratingPickerConfigChange($event)">Allow Half Rating
+                    </mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="vertical" (change)="ratingPickerConfigChange($event)">Vertical Rating
+                    </mat-checkbox>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Full Rating Custom Icon" [(ngModel)]="fullRatingIcon"
+                            (change)="ratingPickerConfigChange($event)"
+                            matTooltip="Full Rating Custom Icon (Eg: brightness_high)">
+                        <mat-icon [ngStyle]="{'color': '#fbbc04'}" matSuffix>{{fullRatingIcon}}</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Half Rating Custom Icon" [(ngModel)]="halfRatingIcon"
+                            (change)="ratingPickerConfigChange($event)"
+                            matTooltip="Half Rating Custom Icon (Eg: brightness_medium)">
+                        <mat-icon [ngStyle]="{'color': '#fbbc04'}" matSuffix>{{halfRatingIcon}}</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Empty Rating Custom Icon" [(ngModel)]="emptyRatingIcon"
+                            (change)="ratingPickerConfigChange($event)"
+                            matTooltip="Empty Rating Custom Icon (Eg: brightness_low)">
+                        <mat-icon [ngStyle]="{'color': '#fbbc04'}" matSuffix>{{emptyRatingIcon}}</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Stars Color" [(ngModel)]="starsColors"
+                            matTooltip="Stars Colors for each rating (Eg: color1,color2,color3,color4...')"
+                            (change)="ratingPickerConfigChange($event,'color')">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-label>Generate Color&nbsp;&nbsp;</mat-label>
+                    <input type="color" placeholder="Generate Color" (change)="colorGenerated = $event.srcElement.value"
+                        matTooltip="Stars Color">
+                    <mat-label>&nbsp;&nbsp;Color:&nbsp;&nbsp;{{colorGenerated}}</mat-label>
+                </div>
+
+            </div>
+
+        </mat-card>
+        <!-- CONFIG -->
+
+        <!-- CONTROL -->
+        <mat-card>
+            <oh-rating-picker [config]="ratingPickerConfig" (valueChange)="ratingPickerChange($event)">
+            </oh-rating-picker>
+        </mat-card>
+        <!-- CONTROL -->
+
+    </mat-tab>
+    <!-- RATING PICKER -->
+
+    <!-- SELECT -->
+    <mat-tab label="SELECT">
+
+        <!-- VALUE -->
+        <mat-card style="background: #e1e9f1;">
+            VALUE: {{selectedList.join(',')}}
+        </mat-card>
+        <!-- VALUE -->
+
+        <!-- CONTROL -->
+        <mat-card>
+            <oh-select [data]="selectData" [config]="selectConfig" (valueChange)="selectionChange($event)">
+            </oh-select>
+        </mat-card>
+        <!-- CONTROL -->
+
+        <!-- CONFIG -->
+        <mat-card>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Placeholder" [(ngModel)]="placeholderSel" (change)="selectReset()"
+                            matTooltip="Placeholder">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Width" [(ngModel)]="widthSelect" (change)="selectReset()"
+                            matTooltip="Eg: 90px, 50pt, 2in, auto">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Panel Width" [(ngModel)]="panelWidthSelect"
+                            (change)="selectReset()" matTooltip="Eg: 90px, 50pt, 2in, auto">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <input matInput placeholder="Panel Height" [(ngModel)]="panelHeightSelect"
+                            (change)="selectReset()" matTooltip="Eg: 90px, 50pt, 2in, auto">
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Displayed Columns</mat-label>
+                        <mat-select [(value)]="displayedColumns" (selectionChange)="selectReset()"
+                            [(ngModel)]="displayedColumns" matTooltip="Displayed Columns" multiple>
+                            <mat-option *ngFor="let col of selectColumnList" [value]="col">{{col}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>GroupBy Columns</mat-label>
+                        <mat-select [(value)]="groups" (selectionChange)="selectReset()" [(ngModel)]="groups"
+                            matTooltip="GroupBy Columns" multiple>
+                            <mat-option *ngFor="let col of selectColumnList" [value]="col">{{col}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Disabled Values</mat-label>
+                        <mat-select [(value)]="disabledValues" (selectionChange)="selectReset()"
+                            [(ngModel)]="disabledValues" matTooltip="Disabled Values" multiple>
+                            <mat-option *ngFor="let col of selectData" [value]="col[valueField]">
+                                {{col[nameField]}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Value Field</mat-label>
+                        <mat-select [(value)]="valueField" (selectionChange)="selectReset()" [(ngModel)]="valueField"
+                            matTooltip="Value Field">
+                            <mat-option *ngFor="let col of selectColumnList" [value]="col">{{col}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-form-field>
+                        <mat-label>Name Field</mat-label>
+                        <mat-select [(value)]="nameField" (selectionChange)="selectReset()" [(ngModel)]="nameField"
+                            matTooltip="Name Field">
+                            <mat-option *ngFor="let col of selectColumnList" [value]="col">{{col}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="requiredSel" (change)="selectReset()">
+                        Required</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="disabledSel" (change)="selectReset()">
+                        Disable</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="multiSelect" (change)="selectReset()">
+                        MultiSelect</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="showValueField" (change)="selectReset()">
+                        Show Value Field</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="returnValueOnClose" (change)="selectReset()">
+                        Return Value On Close</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="autoSelectFirstOption" (change)="selectReset()">
+                        AutoSelect First Option</mat-checkbox>
+                </div>
+
+                <div fxFlex style="margin: 10px 0px;">
+                    <mat-checkbox [(ngModel)]="autoActiveFirstOption" (change)="selectReset()">
+                        AutoActive First Option</mat-checkbox>
+                </div>
+
+            </div>
+
+        </mat-card>
+        <!-- CONFIG -->
+
+    </mat-tab>
+    <!-- SELECT -->
+
+</mat-tab-group>

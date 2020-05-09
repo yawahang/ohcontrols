@@ -1,0 +1,51 @@
+.oh-date-picker-wrapper {
+  width: auto;
+
+  .date-picker-icon {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+}
+
+.oh-disabled {
+  pointer-events: none !important;
+  color: #b4b4b4 !important;
+}
+
+.oh-date-picker-autocomplete {
+  padding: 5px;
+  .mat-option {
+    height: auto !important;
+  }
+
+  .date-input {
+    width: auto !important;
+  }
+
+  .mat-option-disabled {
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+
+  .hour-input,
+  .minute-input,
+  .seconds-input {
+    width: 50px;
+    input {
+      width: 80% !important;
+      text-align: center;
+    }
+  }
+
+  .meridian-input {
+    width: 55px;
+
+    .mat-icon {
+      cursor: pointer;
+      font-size: 20px;
+      margin: 0px !important;
+      padding: 0px !important;
+    }
+  }
+}

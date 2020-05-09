@@ -1,0 +1,83 @@
+<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign="start center">
+    <div fxFlex="40" class="filter-buttons">
+        <mat-button-toggle-group #group="matButtonToggleGroup" appearance="legacy" value="all">
+
+            <mat-button-toggle value="expandAll" (click)="toggleNode(expanded ? 'collapseAll' : 'expandAll')">
+                <mat-icon matTooltip="{{ expanded ? 'Collapse All' : 'Expand All'}}">
+                    {{ expanded ? 'expand_more' : 'chevron_right'}}</mat-icon>
+            </mat-button-toggle>
+
+            <mat-button-toggle disabled value="checkAll">
+                <mat-checkbox class="check-all" [checked]="checkedAll" [indeterminate]="indeterminate"
+                    matTooltip="{{ checkedAll ? 'UnCheck All' : 'Check All'}}" (change)="checkAll($event)">Check All
+                </mat-checkbox>
+            </mat-button-toggle>
+
+            <mat-button-toggle value="all" (click)="toggleNode('all')">
+                <mat-icon matTooltip="All">done_all</mat-icon>
+            </mat-button-toggle>
+
+            <mat-button-toggle value="checked" (click)="toggleNode('checked')">
+                <mat-icon matTooltip="Checked">check_box</mat-icon>
+            </mat-button-toggle>
+
+            <mat-button-toggle value="unchecked" (click)="toggleNode('unchecked')">
+                <mat-icon matTooltip="Unchecked">check_box_outline_blank</mat-icon>
+            </mat-button-toggle>
+
+            <mat-button-toggle *ngIf="searchable" disabled value="search" class="search-node">
+                <input #searchInput type="text" class="node-search" placeholder="Search"
+                    (change)="searchNode($event)" />
+                <mat-icon *ngIf="this.searchText != null && this.searchText !== ''" matTooltip="Clear"
+                    (click)="clearSearch()">close</mat-icon>
+            </mat-button-toggle>
+
+        </mat-button-toggle-group>
+    </div>
+    <div fxFlex="60" fxHide fxShow.gt-sm>
+
+    </div>
+</div>
+
+<div class="oh-tree-wrapper">
+    <ul *ngFor="let node of getNode(0,'rootNode')" class="oh-tree">
+        <li [ngClass]="(node.visible && node.searched) ? 'show-node' : 'hide-node'">
+
+            <mat-icon *ngIf="hasChild(node)" [ngClass]="(node.visible && node.searched) ? 'show-node' : 'hide-node'"
+                (click)="openCloseNode(node)">
+                {{ node.expanded ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+
+            <mat-checkbox *ngIf=" (node.visible && node.searched)" [checked]="node.checked"
+                [indeterminate]="node.indeterminate" [disabled]="node.disabled" [(ngModel)]="node.checked"
+                (change)="onCheckChange(node)">
+                {{node.node}}</mat-checkbox>
+
+            <ul class="collapsible-node" [ngClass]="node.expanded ? 'toggle-node-show' : 'toggle-node-hide'"
+                *ngIf="getNode(node.nodeId,'parentNodeId')">
+                <ng-container *ngTemplateOutlet="recursiveNode; context:{ $implicit: node }"></ng-container>
+            </ul>
+        </li>
+    </ul>
+
+    <ng-template #recursiveNode let-node>
+        <li *ngFor="let child of getNode(node.nodeId,'parentNodeId')"
+            [ngClass]="(child.visible && child.searched) ? 'show-node ' : 'hide-node'">
+
+            <mat-icon *ngIf="hasChild(child)" [ngClass]="(child.visible && child.searched) ? 'show-node ' : 'hide-node'"
+                (click)="openCloseNode(child)">
+                {{child.expanded ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+
+            <mat-checkbox [checked]="child.checked" [indeterminate]="child.indeterminate" [disabled]="child.disabled"
+                [(ngModel)]="child.checked" (change)="onCheckChange(child)">
+                {{child.node}}</mat-checkbox>
+
+            <ul *ngIf="getNode(child.nodeId,'parentNodeId')" class="collapsible-node"
+                [ngClass]="child.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
+                <ng-container *ngTemplateOutlet="recursiveNode; context:{ $implicit: child }">
+                </ng-container>
+            </ul>
+        </li>
+    </ng-template>
+</div>

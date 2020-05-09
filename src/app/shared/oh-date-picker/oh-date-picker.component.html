@@ -1,0 +1,164 @@
+<mat-form-field [ngStyle]="{'min-width': width}" class="oh-date-picker-wrapper" matTooltip="{{placeholder}}">
+
+    <ng-container *ngIf="!toggledInput">
+        <input matInput #datePickerInput [name]="name" [formControl]="name" [placeholder]="placeholder"
+            #ohDateAutoTrigger="matAutocompleteTrigger" [matAutocomplete]="ohDateAutoComplete"
+            [matAutocompleteDisabled]="!ohDateAutoComplete" [required]="required" [disabled]="disabled"
+            class="date-picker-input" (click)="openAutoCompletePanel($event)" (focus)="openAutoCompletePanel($event)"
+            (keyup)="datePickerInputChange($event)" (keydown)="panelFn($event)">
+
+        <mat-icon *ngIf="isRange || type == 'date-time'" [ngClass]="disabled ? 'oh-disabled' : ''"
+            class="date-picker-icon" (click)="openAutoCompletePanel($event)" matSuffix>today
+        </mat-icon>
+
+        <mat-icon *ngIf="!isRange && type == 'date'" [ngClass]="disabled ? 'oh-disabled' : ''"
+            (click)="openAutoCompletePanel($event)" matSuffix>
+            calendar_today</mat-icon>
+
+        <mat-icon *ngIf="!isRange && type == 'time'" [ngClass]="disabled ? 'oh-disabled' : ''"
+            (click)="openAutoCompletePanel($event)" matSuffix>
+            access_time</mat-icon>
+
+    </ng-container>
+
+    <ng-container *ngIf="toggledInput">
+        <input matInput [name]="name" [formControl]="name" [placeholder]="placeholder" [disabled]="disabled"
+            [required]="required" class="date-picker-input"
+            [value]="(defaultDate.start ? defaultDate.start.value : null)"
+            [min]="(minDate.start ? minDate.start.value : null)" [max]="(maxDate.end ? maxDate.end.value : null)"
+            [matDatepickerFilter]="dateFilter" (dateChange)="onDateChange($event,'start')"
+            [disabled]="dateInputDisabled || disabled || dateDisabled" [matDatepicker]="datePickerInputMain">
+
+        <mat-datepicker-toggle matSuffix [for]="datePickerInputMain"
+            [disabled]="datePickerIconDisabled || disabled || dateDisabled">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #datePickerInputMain [startView]="startView.start"
+            [startAt]="startAt.start ? startAt.start.value : null" [required]="required"
+            [disabled]="datePickerPopupDisabled || disabled || dateDisabled">
+        </mat-datepicker>
+    </ng-container>
+
+</mat-form-field>
+
+<mat-autocomplete #ohDateAutoComplete="matAutocomplete" class="oh-date-picker-autocomplete" [multiple]='true'
+    [tabIndex]="-1" [panelWidth]="'auto'" (closed)="onClosed()" (opened)="onOpened()">
+
+    <mat-option (click)="$event ? $event.stopPropagation() : null;" [disabled]="true">
+        <div fxLayout="{{(isRange && controlAlign == 'horizontal') ? 'row' : 'column'}}"
+            fxLayoutAlign="space-between center">
+
+            <div fxLayout="column">
+                <div *ngIf="type == 'date' || type == 'date-time'">
+
+                    <ng-container *ngIf="isInline">
+                        <ng-container *ngTemplateOutlet="inlineCalendar; context: { $implicit: {control: 'start'}}">
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="!isInline">
+                        <ng-container
+                            *ngTemplateOutlet="toggleCalendar; context: { $implicit: {control: 'start', name: (isRange ? (name + 'start') : name), placeholder:  (isRange ? (placeholder + ' start') : placeholder)}}">
+                        </ng-container>
+                    </ng-container>
+
+                </div>
+                <div *ngIf="type == 'time' || type == 'date-time'">
+                    <ng-container *ngTemplateOutlet="timePicker; context: { $implicit: {control: 'start'}}">
+                    </ng-container>
+                </div>
+            </div>
+
+            <div *ngIf="isRange" fxLayout="column">
+                <div *ngIf="type == 'date' || type == 'date-time'">
+
+                    <ng-container *ngIf="isInline">
+                        <ng-container *ngTemplateOutlet="inlineCalendar; context: { $implicit: {control: 'end'}}">
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngIf="!isInline">
+                        <ng-container
+                            *ngTemplateOutlet="toggleCalendar; context: { $implicit: {control: 'end', name: (isRange ? (name + 'end') : name), placeholder:  (isRange ? (placeholder + ' end') : placeholder)}}">
+                        </ng-container>
+                    </ng-container>
+
+                </div>
+                <div *ngIf="type == 'time' || type == 'date-time'">
+                    <ng-container *ngTemplateOutlet="timePicker; context: { $implicit: {control: 'end'}}">
+                    </ng-container>
+                </div>
+            </div>
+
+        </div>
+    </mat-option>
+</mat-autocomplete>
+
+<!--Toggle Calendar -->
+<ng-template #toggleCalendar let-placeholder let-prop>
+    <mat-form-field class="date-input">
+        <input matInput [name]="prop.name" [placeholder]="prop.placeholder" [required]="required"
+            [disabled]="dateInputDisabled || disabled || dateDisabled"
+            [value]="(defaultDate[prop.control] ? defaultDate[prop.control].value : null)"
+            [min]="(minDate[prop.control] ? minDate[prop.control].value : null)"
+            [max]="(maxDate[prop.control] ? maxDate[prop.control].value : null)" [matDatepickerFilter]="dateFilter"
+            (dateChange)="onDateChange($event, prop.control)" [matDatepicker]="toggleDatePicker">
+
+        <mat-datepicker-toggle matSuffix [for]="toggleDatePicker"
+            [disabled]="datePickerIconDisabled || disabled || dateDisabled">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #toggleDatePicker [startView]="startView[prop.control]"
+            [startAt]="startAt[prop.control] ? startAt[prop.control].value : null" [required]="required"
+            [disabled]="datePickerPopupDisabled || disabled || dateDisabled">
+        </mat-datepicker>
+    </mat-form-field>
+</ng-template>
+<!--Toggle Calendar -->
+
+<!--Inline Calendar -->
+<ng-template #inlineCalendar let-prop>
+    <mat-calendar [selected]="defaultDate[prop.control] ? defaultDate[prop.control].value : null"
+        [startAt]="startAt[prop.control] ? startAt[prop.control].value : null"
+        [min]="(minDate[prop.control] ? minDate[prop.control].value : null)"
+        [max]="(maxDate[prop.control] ? maxDate[prop.control].value : null)" [dateFilter]="dateFilter"
+        (selectedChange)="onDateChange($event, prop.control)" [disabled]="disabled">
+    </mat-calendar>
+</ng-template>
+<!--Inline Calendar -->
+
+<!--Time Picker -->
+<ng-template #timePicker let-prop>
+
+    <mat-form-field *ngIf="!hideHour" class="hour-input">
+        <input #hourInputEnd matInput type='number' placeholder="HH" [value]="hour[prop.control]" min="-1"
+            max="{{hourFormat}}" (onScroll)="handleScroll($event)" (change)="onHourChange($event, prop.control)"
+            pattern="[-+]?[0-9]" [disabled]="timeDisabled || disabled || disableHour" [required]="required">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!hideMinute" class="minute-input">
+        <span matPrefix>:</span>
+        <input matInput #minuteInputEnd type="number" placeholder="MM" [value]="minute[prop.control]"
+            (change)="onMinuteChange($event, prop.control)" min="-1" max="60" pattern="[-+]?[0-9]"
+            [disabled]="timeDisabled || disabled || disableMinute" [required]="required">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!hideSeconds" class="seconds-input">
+        <span matPrefix>:</span>
+        <input matInput #secondsInputEnd *ngIf="!hideSeconds" type="number" placeholder="SS"
+            [value]="seconds[prop.control]" (change)="onSecondsChange($event, prop.control)" min="-1" max="60"
+            [disabled]="timeDisabled || disabled || disableSeconds" [required]="required">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!hideMeridian" class="meridian-input">
+        <input matInput #meridianInputEnd [value]="meridian[prop.control]" [placeholder]="meridian[prop.control]"
+            (keydown)="onMeridianChange($event, prop.control)" [disabled]="timeDisabled || disabled || disableMeridian"
+            [required]="required">
+        <mat-icon id="{{'meridian' + prop.control}}" (click)="onMeridianChange($event, prop.control)" matSuffix
+            [ngClass]="(timeDisabled || disabled || disableMeridian) ? 'oh-disabled' : ''"
+            [ngStyle]="{'color': (meridian[prop.control]) == 'AM' ? '#fed800' : '#d0b51e'}">
+            {{ meridian[prop.control] == 'AM' ? 'brightness_high' : 'brightness_medium'}}
+        </mat-icon>
+    </mat-form-field>
+</ng-template>
+<!--Time Picker -->

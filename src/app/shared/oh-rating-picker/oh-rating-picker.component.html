@@ -1,0 +1,8 @@
+<div class="oh-rating-picker-wrapper">
+    <div class="oh-rating-star-wrapper {{orientation}}">
+        <mat-icon *ngFor="let s of stars;" class="oh-star" (mouseenter)="onStarHover(s)" (click)="onStarClick(s)"
+            matTooltip="{{tempValue}}" [ngStyle]="{'color': s.color}">
+            {{s.icon}}
+        </mat-icon>
+    </div>
+</div>

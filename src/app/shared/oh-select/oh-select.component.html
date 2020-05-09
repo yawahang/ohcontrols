@@ -1,0 +1,70 @@
+<mat-form-field [ngStyle]="{'min-width': width}" class="oh-sel-wrapper" matTooltip="{{placeholder}}">
+    <div class="oh-sel-container">
+        <mat-chip-list #ohSelChipList [selectable]="false" [tabIndex]="-1">
+
+            <mat-chip *ngIf="currentSelection !== ''" (click)="searchTb.click();" [selectable]="false" [color]="'white'"
+                [disabled]="disabled">
+                {{currentSelection}}
+            </mat-chip>
+
+            <input matInput #searchTb type="text" [id]="selectId" [name]="name" [formControl]="name"
+                [placeholder]="placeholder" [disabled]="disabled" [required]="required"
+                #ohSelAutoTrigger="matAutocompleteTrigger" [matAutocomplete]="ohSelAutoComplete"
+                [matChipInputFor]="ohSelChipList" spellcheck="false" autocomplete="new-password" autocapitalize="off"
+                [attr.aria-label]="placeholder" class="select-input" (click)="openAutoCompletePanel($event)"
+                (focus)="openAutoCompletePanel($event)" (keyup)="searchChange($event)" (keydown)="keyFn($event)">
+
+            <mat-icon *ngIf="selectData.filter != ''" [ngClass]="disabled ? 'oh-disabled' : ''" (click)="onClear()"
+                class="btn-clear" tabindex="-1" matSuffix>close</mat-icon>
+
+            <mat-icon [ngClass]="disabled ? 'oh-disabled' : ''" class="select-toggle"
+                (click)="openAutoCompletePanel($event)" tabindex="-1" matSuffix>arrow_drop_down</mat-icon>
+
+        </mat-chip-list>
+
+        <mat-autocomplete #ohSelAutoComplete="matAutocomplete" class="select-autocomplete" [panelWidth]="'auto'"
+            [ngStyle]="{'min-width': width}" [ngStyle]="{'height': panelHeight}" [multiple]='multiSelect'
+            [autoActiveFirstOption]="autoActiveFirstOption" [tabIndex]="-1" (closed)="onClosed()" (opened)="onOpened()">
+
+            <mat-table [dataSource]="selectData" (matSortChange)="sortData($event)"
+                class="mat-elevation-z8 select-table" matSort>
+
+                <!-- SELECT COLUMN -->
+                <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? selectUnselectAll() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="getLabel()">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="optionChange($event,row)"
+                            [checked]="selection.isSelected(row)" [aria-label]="getLabel(row)">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+                <!-- SELECT COLUMN -->
+
+                <!-- COLUMNS -->
+                <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns;">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{column.charAt(0).toLocaleUpperCase() + column.slice(1)}} </mat-header-cell>
+                    <mat-cell *matCellDef="let data"> {{data[column]}} </mat-cell>
+                </ng-container>
+                <!-- COLUMNS -->
+
+                <!-- ROWS -->
+                <mat-header-row *matHeaderRowDef="displayedColumnsHeader; sticky: true;"></mat-header-row>
+                <mat-option *matRowDef="let row; columns: displayedColumnsHeader;" [value]="row"
+                    [disabled]="disabledValues.includes(row[valueField])" matRipple>
+                    <div (click)="optionChange($event, row)">
+                        <mat-row></mat-row>
+                    </div>
+                </mat-option>
+                <!-- ROWS -->
+
+            </mat-table>
+
+        </mat-autocomplete>
+    </div>
+</mat-form-field>
