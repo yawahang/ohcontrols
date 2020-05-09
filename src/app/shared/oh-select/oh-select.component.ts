@@ -72,7 +72,7 @@ export class OHSelectComponent implements OnInit {
       this.disabledValues = prop.disabledValues ? prop.disabledValues : [];
       this.displayedColumns = prop.displayedColumns ? prop.displayedColumns : [];
 
-      this.selectId = this.name + parseInt((Math.random() * 500).toString()).toString();
+      this.selectId = this.name + Number((Math.random() * 500).toString()).toString();
 
       const w = prop.width ? prop.width : '100px';
       this.width = w;
@@ -282,7 +282,7 @@ export class OHSelectComponent implements OnInit {
     return (selected === total);
   }
 
-  selectUnselectAll(): void { // Selects all options if not selected, clears all selection if selected 
+  selectUnselectAll(): void { // Selects all options if not selected, clears all selection if selected
     this.isAllSelected() ? this.selection.clear() : this.selectData.data.forEach((row: any) => this.selection.select(row));
     this.valueChanged = true;
     this.emitValueChange();
