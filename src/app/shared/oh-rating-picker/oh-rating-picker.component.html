@@ -13,7 +13,7 @@
     <div class="oh-rating {{orientation}}">
         <ng-container *ngFor="let r of ratings">
             <input type="radio" [name]="r" value="{{r}}" [checked]="tempValue === r" />
-            <label title="{{r}}" (click)='onCssStarClick(r)'>{{r}}</label>
+            <label matTooltip="{{r}}" (click)='onCssStarClick(r)'></label>
         </ng-container>
     </div>
 </ng-container>
