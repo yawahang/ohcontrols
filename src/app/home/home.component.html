@@ -64,6 +64,10 @@
                     </mat-form-field>
                 </div>
 
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
                         <mat-label>Hour Format</mat-label>
@@ -89,10 +93,6 @@
                     </mat-form-field>
                 </div>
 
-            </div>
-
-            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
-
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
                         <mat-label>StartView (StartDate)</mat-label>
@@ -104,6 +104,10 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
 
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
@@ -120,8 +124,8 @@
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
                         <input matInput [matDatepicker]="defaultDateStart" placeholder="DefaultDate (StartDate)"
-                            matTooltip="DefaultDate For StartDate"
-                            (dateChange)="dateConfigChange($event,'defaultDate.start')">
+                            matTooltip="DefaultDate For StartDate || ISODate string eg: 2019-12-13T06:45:23.370 || LocalDate string eg: 12/13/2019T06:45:23.370"
+                            [matTooltipClass]="'multiline'" (dateChange)="dateConfigChange($event,'defaultDate.start')">
                         <mat-datepicker-toggle matSuffix [for]="defaultDateStart"></mat-datepicker-toggle>
                         <mat-datepicker #defaultDateStart></mat-datepicker>
                     </mat-form-field>
@@ -130,30 +134,13 @@
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
                         <input matInput disabled="{{!isRange}}" [matDatepicker]="defaultDateEnd"
-                            placeholder="DefaultDate (EndDate)" matTooltip="DefaultDate For EndDate"
-                            (dateChange)="dateConfigChange($event,'defaultDate.end')">
+                            placeholder="DefaultDate (EndDate)"
+                            matTooltip="DefaultDate For EndDate || ISODate string eg: 2019-12-13T06:45:23.370 || LocalDate string eg: 12/13/2019T06:45:23.370"
+                            [matTooltipClass]="'multiline'" (dateChange)="dateConfigChange($event,'defaultDate.end')">
                         <mat-datepicker-toggle matSuffix [for]="defaultDateEnd"></mat-datepicker-toggle>
                         <mat-datepicker #defaultDateEnd></mat-datepicker>
                     </mat-form-field>
                 </div>
-
-                <div fxFlex style="margin: 10px 0px;">
-                    <mat-form-field>
-                        <input matInput placeholder="DefaultTime (StartDate)" matTooltip="Eg: 10:30:12 AM"
-                            [(ngModel)]="defaultTime.start" (change)="reSetDateConfig()">
-                    </mat-form-field>
-                </div>
-
-                <div fxFlex style="margin: 10px 0px;">
-                    <mat-form-field>
-                        <input matInput disabled="{{!isRange}}" placeholder="DefaultTime (EndDate)"
-                            matTooltip="Eg: 10:30:12 AM" [(ngModel)]="defaultTime.end" (change)="reSetDateConfig()">
-                    </mat-form-field>
-                </div>
-
-            </div>
-
-            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
 
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
@@ -164,6 +151,10 @@
                         <mat-datepicker #startAtStart></mat-datepicker>
                     </mat-form-field>
                 </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
 
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-form-field>
@@ -249,14 +240,14 @@
                         Disable Date Textbox</mat-checkbox>
                 </div>
 
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-checkbox [(ngModel)]="datePickerPopupDisabled" (change)="dateConfigChange($event)">
                         Disable Date Calender</mat-checkbox>
                 </div>
-
-            </div>
-
-            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
 
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-checkbox [(ngModel)]="datePickerIconDisabled"
@@ -284,6 +275,10 @@
                         Hide Hour</mat-checkbox>
                 </div>
 
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
+
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-checkbox [(ngModel)]="hideMinute" (change)="dateConfigChange($event)">
                         Hide Minute</mat-checkbox>
@@ -299,10 +294,6 @@
                         Hide Meridian</mat-checkbox>
                 </div>
 
-            </div>
-
-            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
-
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-checkbox name="Sun" (change)="dayDisableChange($event)">
                         Disable Sunday</mat-checkbox>
@@ -317,6 +308,10 @@
                     <mat-checkbox name="Tue" (change)="dayDisableChange($event)">
                         Disable Tuesday</mat-checkbox>
                 </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="space-between center">
 
                 <div fxFlex style="margin: 10px 0px;">
                     <mat-checkbox name="Wed" (change)="dayDisableChange($event)">
@@ -472,8 +467,19 @@
 
         <!-- CONTROL -->
         <mat-card>
-            <oh-rating-picker [config]="ratingPickerConfig" (valueChange)="ratingPickerChange($event)">
+
+            <!-- CONTROL Mat Icon Rating-->
+            <h6>Mat Icon Rating</h6>
+            <oh-rating-picker [config]="ratingPickerConfigMatIcon" (valueChange)="ratingPickerChange($event)">
             </oh-rating-picker>
+            <!-- CONTROL Mat Icon Rating-->
+
+            <!-- CONTROL CSS Rating-->
+            <h6>CSS Rating</h6>
+            <oh-rating-picker [config]="ratingPickerConfigCss" (valueChange)="ratingPickerChange($event)">
+            </oh-rating-picker>
+            <!-- CONTROL CSS Rating-->
+
         </mat-card>
         <!-- CONTROL -->
 

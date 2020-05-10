@@ -16,8 +16,7 @@ export class HomeComponent {
 
   placeholder = 'Placeholder';
   dateTimeValue: any;
-  defaultDate = { start: null, end: null };
-  defaultTime = { start: null, end: null };
+  defaultDate = { start: '2019-12-13T06:45:23.370', end: '2019-12-18T06:45:23.370' };
   startView = { start: 'month', end: null };
   startAt = { start: null, end: null };
   minDate = { start: null, end: null };
@@ -56,7 +55,6 @@ export class HomeComponent {
     startAt: this.startAt,
     startView: this.startView,
     defaultDate: this.defaultDate,
-    defaultTime: this.defaultTime,
     minDate: this.minDate,
     maxDate: this.maxDate,
     datePickerIconDisabled: this.datePickerIconDisabled,
@@ -117,7 +115,6 @@ export class HomeComponent {
       startAt: this.startAt,
       startView: this.startView,
       defaultDate: this.defaultDate,
-      defaultTime: this.defaultTime,
       minDate: this.minDate,
       maxDate: this.maxDate,
       datePickerIconDisabled: this.datePickerIconDisabled,
@@ -284,7 +281,7 @@ export class HomeComponent {
   halfRatingIcon = 'star_half';
   emptyRatingIcon = 'star_bordered';
 
-  ratingPickerConfig = {
+  ratingPickerConfigMatIcon = {
     starsCount: this.starsCount,
     defaultValue: this.defaultValue,
     returnDefaultValue: this.returnDefaultValue,
@@ -293,22 +290,37 @@ export class HomeComponent {
     orientation: this.vertical ? 'vertical' : 'horizontal',
     fullRatingIcon: this.fullRatingIcon,
     halfRatingIcon: this.halfRatingIcon,
-    emptyRatingIcon: this.emptyRatingIcon
+    emptyRatingIcon: this.emptyRatingIcon,
+    ratingType: 'mat-icon'
+  };
+
+  ratingPickerConfigCss = {
+    starsCount: this.starsCount,
+    defaultValue: this.defaultValue,
+    returnDefaultValue: this.returnDefaultValue,
+    starsColors: this.starsColors,
+    orientation: this.vertical ? 'vertical' : 'horizontal',
+    fullRatingIcon: this.fullRatingIcon,
+    halfRatingIcon: this.halfRatingIcon,
+    emptyRatingIcon: this.emptyRatingIcon,
+    ratingType: 'css'
   };
 
   ratingPickerConfigChange(e: any, ctrl?: string): void {
 
-    this.ratingPickerConfig.starsColors = this.starsColors;
-    this.ratingPickerConfig.starsCount = this.starsCount;
-    this.ratingPickerConfig.defaultValue = this.defaultValue;
-    this.ratingPickerConfig.returnDefaultValue = this.returnDefaultValue;
-    this.ratingPickerConfig.allowHalf = this.allowHalf;
-    this.ratingPickerConfig.fullRatingIcon = this.fullRatingIcon;
-    this.ratingPickerConfig.halfRatingIcon = this.halfRatingIcon;
-    this.ratingPickerConfig.emptyRatingIcon = this.emptyRatingIcon;
-    this.ratingPickerConfig.orientation = this.vertical ? 'vertical' : 'horizontal';
-    this.ratingPickerConfig = { ...this.ratingPickerConfig };
-    console.log('ratingPickerConfig =====> ', this.ratingPickerConfig);
+    this.ratingPickerConfigMatIcon.starsColors = this.starsColors;
+    this.ratingPickerConfigMatIcon.starsCount = this.starsCount;
+    this.ratingPickerConfigMatIcon.defaultValue = this.defaultValue;
+    this.ratingPickerConfigCss.defaultValue = this.defaultValue;
+    this.ratingPickerConfigMatIcon.returnDefaultValue = this.returnDefaultValue;
+    this.ratingPickerConfigMatIcon.allowHalf = this.allowHalf;
+    this.ratingPickerConfigMatIcon.fullRatingIcon = this.fullRatingIcon;
+    this.ratingPickerConfigMatIcon.halfRatingIcon = this.halfRatingIcon;
+    this.ratingPickerConfigMatIcon.emptyRatingIcon = this.emptyRatingIcon;
+    this.ratingPickerConfigMatIcon.orientation = this.vertical ? 'vertical' : 'horizontal';
+    this.ratingPickerConfigMatIcon = { ...this.ratingPickerConfigMatIcon };
+    this.ratingPickerConfigCss = { ...this.ratingPickerConfigCss };
+    console.log('ratingPickerConfig =====> ', this.ratingPickerConfigMatIcon);
   }
 
   ratingPickerChange(e: any): void {
