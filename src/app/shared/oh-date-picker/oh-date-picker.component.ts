@@ -700,8 +700,7 @@ export class OHDatePickerComponent implements OnInit {
   // Returns JS Date Object => input ISODate string eg: 2019-12-13T06:45:23.370 for dateTime & 2019-12-13 for date
   // Returns JS Date Object => input LocalDate string eg: 12/13/2019T06:45:23.370 for dateTime & 12/13/2019 for date
   // Returns ISOString => input JS Date Object
-  // Returns DateParts => input ISODate / DateTime  or LocalDate string/ LocalDateTime string
-  // ! Note: ISOString format (2019-12-13T06:45:23.370) as output taken for preventing date conversion due to timezone
+  // ! Note: ISOString format  (2019-12-13T06:45:23.370) as output taken for preventing date conversion due to timezone
   // ! Time part "T06:45:23.370" for two allowed time format is mandatory for datetime input
   toJsDate(date: any, returnType: string): any {
 
@@ -711,17 +710,19 @@ export class OHDatePickerComponent implements OnInit {
 
     try {
 
-      if (returnType.toLowerCase() === 'jsdate' || returnType.toLowerCase() === 'dateparts') {
+      let year: number, month: number, day: number, datePart: any;
+
+      if (returnType.toLowerCase() === 'jsdate') {
 
         const iSOSeperator = date.includes('-');
-        const datePart = date.split(iSOSeperator ? '-' : '/'); // Split DateParts => Output: ["2019", "12", "13T06:45:23.370"] or ["12",  "13","2019T06:45:23.370"]
+        datePart = date.split(iSOSeperator ? '-' : '/'); // Split DateParts => Output: ["2019", "12", "13T06:45:23.370"] or ["12",  "13","2019T06:45:23.370"]
 
         const dayOrYearAndTime = datePart[2].split('T');  // Split Day & Time from DateParts 13T06:45:23.370 => Output: ["13", "06:45:23.370"]
         datePart[2] = dayOrYearAndTime[0]; // Replace Day value "13T06:45:23.370" with "13" or "2019T06:45:23.370" with "2019"
 
-        const year = datePart[iSOSeperator ? 0 : 2];
-        const month = datePart[iSOSeperator ? 1 : 0];
-        const day = datePart[iSOSeperator ? 2 : 1];
+        year = datePart[iSOSeperator ? 0 : 2];
+        month = datePart[iSOSeperator ? 1 : 0];
+        day = datePart[iSOSeperator ? 2 : 1];
 
         const timePart = dayOrYearAndTime[1] ? dayOrYearAndTime[1].split(':') : null; // Split TimeParts from Time => Output: ["06", "45", "23.370"]
         const secondMilliSec = (timePart && timePart[2]) ? timePart[2].split('.') : null; // Split millisec from sec => Output:  ["23", "370"]
@@ -731,22 +732,22 @@ export class OHDatePickerComponent implements OnInit {
         const ss = Number((secondMilliSec && secondMilliSec[2]) ? secondMilliSec[0] : 0);
         const ms = Number((timePart && timePart[0]) ? timePart[0] : 0);
 
-        if (returnType.toLowerCase() === 'dateparts') {
-
-          const meridian = new Date(date).toLocaleTimeString().split(' ')[1];
-          date = { year, month, day, hours: hh, minutes: mm, seconds: ss, ms, meridian };
-
-        } else {
-
-          date = new Date(year, month - 1, day, hh, mm, ss, ms);
-        }
+        date = new Date(year, month - 1, day, hh, mm, ss, ms);
 
       } else if (returnType.toLowerCase() === 'isostring') { // ISO Date String
 
-        const dateISOStr = date.toISOString();
+        const localDate = date.toLocaleDateString();
+        datePart = localDate.split('/');
+        year = datePart[2];
+        month = datePart[0];
+        day = datePart[1];
+
+        const mm = month < 10 ? `0${month}` : month;
+        const dd = day < 10 ? `0${day}` : day;
+
         const time = date.toTimeString();
         const zone = date.toISOString();
-        date = `${dateISOStr.split('T')[0]}T${time.split(' ')[0]}.${zone.split('.')[1]}`;
+        date = `${year}-${mm}-${dd}T${time.split(' ')[0]}.${zone.split('.')[1]}`;
       }
 
       return date;
