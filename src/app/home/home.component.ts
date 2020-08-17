@@ -237,7 +237,6 @@ export class HomeComponent {
   ----------------------------  Treeview Start ------------------------------
   ------------------------------------------------------------------------ */
 
-  treeData = treeViewData;
   nodeIdList: number[] = [];
   expanded = true;
   searchable = true;

@@ -26,20 +26,17 @@ export class OHTreeViewComponent implements OnInit, OnDestroy {
   currentNode: MvTree; // currently value changed node
   rootNode: MvTree[];
 
-  @Input('data') set data(data: any[]) {
-
-    if (data) {
-
-      this.treeNode = data;
-    } else {
-
-      this.treeNode = [];
-    }
-  }
-
   @Input('config') set config(prop: MvConfig) {
 
     if (prop) {
+
+      if (prop.data) {
+
+        this.treeNode = prop.data;
+      } else {
+
+        this.treeNode = [];
+      }
 
       this.searchable = prop.searchable != null ? prop.searchable : true;
       this.expanded = prop.expanded != null ? prop.expanded : true;
@@ -97,8 +94,8 @@ export class OHTreeViewComponent implements OnInit, OnDestroy {
 
   private isCheckedAll() { // set checked, indeterminate for check all checkbox
 
-    const checkedNodes = this.treeNode.filter(n => (n.checked === true && n.visible === true));
-    const allNode = this.treeNode.filter(n => (n.visible === true));
+    const checkedNodes = this.treeNode.filter(n => (n.checked && n.visible));
+    const allNode = this.treeNode.filter(n => (n.visible));
 
     if (allNode.length === checkedNodes.length) {
 
@@ -117,28 +114,25 @@ export class OHTreeViewComponent implements OnInit, OnDestroy {
 
   onCheckChange(node: MvTree) {
 
-    if (!node.disabled) {
+    node.checked = !node.checked;
 
-      node.checked = !node.checked;
+    if (node.parentNodeId == null && node.nodeId === node.rootNodeId) { // set indeterminate for root node
 
-      if (node.parentNodeId == null && node.nodeId === node.rootNodeId) { // set indeterminate for root node
+      const child: MvTree[] = this.getNode(node.nodeId, 'rootNodeId');
+      child.forEach(x => {
 
-        const child: MvTree[] = this.getNode(node.nodeId, 'rootNodeId');
-        child.forEach(x => {
+        x.checked = node.checked;
+        this.currentNode = x;
+        this.visitChildNodes(x, node.checked);
+      });
+    } else {
 
-          x.checked = node.checked;
-          this.currentNode = x;
-          this.visitChildNodes(x, node.checked);
-        });
-      } else {
-
-        this.currentNode = node;
-        this.visitChildNodes(node, node.checked);
-      }
-
-      this.isCheckedAll();
-      this.valueChange.emit(this.checkedNodes);
+      this.currentNode = node;
+      this.visitChildNodes(node, node.checked);
     }
+
+    this.isCheckedAll();
+    this.valueChange.emit(this.checkedNodes);
   }
 
   setIndeterminate(node: MvTree) {
@@ -197,10 +191,10 @@ export class OHTreeViewComponent implements OnInit, OnDestroy {
     } else {  // if checked node is lowest child or has no child
 
       this.visitParentNodes(node);
-      if (!node.disabled && node.checked && !this.checkedNodes.includes(node.nodeId)) {
+      if (node.checked && !this.checkedNodes.includes(node.nodeId)) {
 
         this.checkedNodes.push(node.nodeId);
-      } else if (!node.checked && !node.disabled) {
+      } else if (!node.checked) {
 
         this.checkedNodes = this.checkedNodes.filter(x => (x !== node.nodeId));
       }
@@ -382,6 +376,7 @@ export interface MvTree {
 }
 
 export interface MvConfig {
+  data: MvTree[];
   expanded: boolean;
   searchable: boolean;
 }
