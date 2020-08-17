@@ -40,7 +40,7 @@
 </div>
 
 <div class="oh-tree-wrapper">
-    <ul *ngFor="let node of getNode(0,'rootNode')" class="oh-tree">
+    <ul *ngFor="let node of getNode(0,'rootNode'); trackBy: trackIndex" class="oh-tree">
         <li [ngClass]="(node.visible && node.searched) ? 'show-node' : 'hide-node'">
 
             <mat-icon *ngIf="hasChild(node)" [ngClass]="(node.visible && node.searched) ? 'show-node' : 'hide-node'"
@@ -60,7 +60,7 @@
     </ul>
 
     <ng-template #recursiveNode let-node>
-        <li *ngFor="let child of getNode(node.nodeId,'parentNodeId')"
+        <li *ngFor="let child of getNode(node.nodeId,'parentNodeId'); trackBy: trackIndex"
             [ngClass]="(child.visible && child.searched) ? 'show-node ' : 'hide-node'">
 
             <mat-icon *ngIf="hasChild(child)" [ngClass]="(child.visible && child.searched) ? 'show-node ' : 'hide-node'"

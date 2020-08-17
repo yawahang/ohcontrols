@@ -1,0 +1,37 @@
+DATE PICKER
+	- Date / date only / date time / time only Picker and Range Picker with Validation
+	- Auto calculation of time 
+	- Time scroll on muse wheel
+	- Many other customizable settings
+
+SELECT
+	- Single / Multiple select property
+	- Single / Multiple columns display
+	- First value Default Select and Highlight
+	- Search
+	- Many other customizable settings
+
+TREE-VIEW
+	- Recursive
+	- Disable nodes
+	- Easy filter nodes
+	- Easy Expand/Collapse nodes
+	- Many other customizable settings
+
+DYNAMIC FORM
+	- Design controls dynamically  
+	- Create dynamic actions
+	- Dynamic multiple form groups
+	- Allow multiple forms for multiple groups
+	- Many other customizable settings
+
+DYNAMIC STEPPER
+	- Create steps dynamically passing the form for each steps
+	- Create actions for each steps dynamically
+	- Many other customizable settings
+
+RATE PICKER
+	- Define total number of rating
+	- Full and half star rating
+	- Custom color and background for rating stars
+	- 

@@ -347,6 +347,10 @@ export class OHTreeViewComponent {
   openCloseNode(node: MvTree) {
     node.expanded = !node.expanded;
   }
+
+  trackIndex(index: number): number {
+    return index;
+  }
 }
 
 export interface MvTree {
