@@ -49,8 +49,7 @@
             </mat-icon>
 
             <mat-checkbox *ngIf="(node.visible && node.searched)" [checked]="node.checked"
-                [indeterminate]="node.indeterminate" [disabled]="node.disabled" [(ngModel)]="node.checked"
-                (change)="onCheckChange(node)">
+                [indeterminate]="node.indeterminate" [disabled]="node.disabled" (change)="onCheckChange(node)">
                 {{node.node}}
             </mat-checkbox>
 
@@ -71,8 +70,7 @@
             </mat-icon>
 
             <mat-checkbox *ngIf="(node.visible && node.searched)" [checked]="child.checked"
-                [indeterminate]="child.indeterminate" [disabled]="child.disabled" [(ngModel)]="child.checked"
-                (change)="onCheckChange(child)">
+                [indeterminate]="child.indeterminate" [disabled]="child.disabled" (change)="onCheckChange(child)">
                 {{child.node}}
             </mat-checkbox>
 
