@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'oh-tree-view',
@@ -7,7 +8,9 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild } 
   encapsulation: ViewEncapsulation.None
 })
 
-export class OHTreeViewComponent {
+export class OHTreeViewComponent implements OnInit, OnDestroy {
+
+  subs: Subscription = new Subscription();
 
   @Output() valueChange = new EventEmitter<any>();
   @ViewChild('searchInput', { static: false }) searchInput: any;
@@ -21,6 +24,7 @@ export class OHTreeViewComponent {
   searchable = true; // tree is searchable
   expanded = true; // tree node is expanded
   currentNode: MvTree; // currently value changed node
+  rootNode: MvTree[];
 
   @Input('data') set data(data: any[]) {
 
@@ -47,6 +51,10 @@ export class OHTreeViewComponent {
 
   }
 
+  ngOnInit() {
+
+  }
+
   initialliazeConfig() {
 
     // set expanded, searchable, searched poperty
@@ -57,8 +65,8 @@ export class OHTreeViewComponent {
     });
 
     // set rootNodeId, checked and indeterminate nodes
-    const rootNode: MvTree[] = this.getNode(0, 'rootNode');
-    rootNode.forEach(n => {
+    this.rootNode = this.getNode(0, 'rootNode');
+    this.rootNode.forEach(n => {
 
       n.rootNodeId = n.nodeId;
       this.currentNode = n;
@@ -66,15 +74,16 @@ export class OHTreeViewComponent {
     });
 
     this.isCheckedAll();
-    this.valueChange.emit(this.checkedNodes); // emit checked nodes initially
+    setTimeout(() => {
+      this.valueChange.emit(this.checkedNodes); // emit checked nodes initially
+    }, 300);
   }
 
   checkAll(e: any) {
 
     if (e) {
 
-      const rootNode: MvTree[] = this.getNode(0, 'rootNode');
-      rootNode.forEach(n => {
+      this.rootNode.forEach(n => {
 
         n.checked = e.checked;
         this.currentNode = n;
@@ -350,6 +359,11 @@ export class OHTreeViewComponent {
 
   trackIndex(index: number): number {
     return index;
+  }
+
+  ngOnDestroy() {
+
+    this.subs.unsubscribe();
   }
 }
 
