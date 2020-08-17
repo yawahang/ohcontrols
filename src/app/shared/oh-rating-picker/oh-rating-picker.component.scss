@@ -1,7 +1,7 @@
-.oh-rating-picker-wrapper {
+.oh-rating-wrapper {
   width: auto;
 
-  .oh-rating-star-wrapper {
+  .oh-rating-icon {
     font-size: medium;
 
     .oh-star:hover {
@@ -20,4 +20,60 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.oh-rating {
+  float: left;
+  border: none;
+  &:not(:checked) {
+    & > input {
+      position: absolute;
+      top: -9999px;
+      clip: rect(0, 0, 0, 0);
+    }
+    & > label {
+      float: right;
+      width: 1em;
+      padding: 0.1em;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size: 200%;
+      line-height: 1.2;
+      color: #ddd;
+      &:before {
+        content: "★ ";
+      }
+    }
+  }
+  & > input {
+    &:checked {
+      & ~ label {
+        color: #f70;
+      }
+    }
+  }
+
+  .horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.oh-rating:not(:checked) > label:hover,
+.oh-rating:not(:checked) > label:hover ~ label {
+  color: gold;
+}
+
+.oh-rating > input:checked ~ label:hover,
+.oh-rating > input:checked ~ label:hover ~ label,
+.oh-rating > label:hover ~ input:checked ~ label {
+  color: #ea0;
 }

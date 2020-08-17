@@ -1,7 +1,7 @@
 <mat-form-field [ngStyle]="{'min-width': width}" class="oh-date-picker-wrapper" matTooltip="{{placeholder}}">
 
     <ng-container *ngIf="!toggledInput">
-        <input matInput #datePickerInput [name]="name" [formControl]="name" [placeholder]="placeholder"
+        <input matInput [name]="name" [formControl]="name" [placeholder]="placeholder" [ngModel]="datePickerInputModel"
             #ohDateAutoTrigger="matAutocompleteTrigger" [matAutocomplete]="ohDateAutoComplete"
             [matAutocompleteDisabled]="!ohDateAutoComplete" [required]="required" [disabled]="disabled"
             class="date-picker-input" (click)="openAutoCompletePanel($event)" (focus)="openAutoCompletePanel($event)"
@@ -130,28 +130,29 @@
 <!--Time Picker -->
 <ng-template #timePicker let-prop>
 
-    <mat-form-field *ngIf="!hideHour" class="hour-input">
-        <input #hourInputEnd matInput type='number' placeholder="HH" [value]="hour[prop.control]" min="-1"
-            max="{{hourFormat}}" (onScroll)="handleScroll($event)" (change)="onHourChange($event, prop.control)"
-            pattern="[-+]?[0-9]" [disabled]="timeDisabled || disabled || disableHour" [required]="required">
+    <mat-form-field *ngIf="!hideHour" class="hours-input">
+        <input matInput type='number' placeholder="HH" [ngModel]="hours[prop.control]" min="-1"
+            [ngModel]="hours[prop.control]" max="{{hourFormat}}" (onScroll)="handleScroll($event)"
+            (change)="onHourChange($event, prop.control)" pattern="[-+]?[0-9]"
+            [disabled]="timeDisabled || disabled || disableHour" [required]="required">
     </mat-form-field>
 
-    <mat-form-field *ngIf="!hideMinute" class="minute-input">
+    <mat-form-field *ngIf="!hideMinute" class="minutes-input">
         <span matPrefix>:</span>
-        <input matInput #minuteInputEnd type="number" placeholder="MM" [value]="minute[prop.control]"
+        <input matInput type="number" placeholder="MM" [ngModel]="minutes[prop.control]"
             (change)="onMinuteChange($event, prop.control)" min="-1" max="60" pattern="[-+]?[0-9]"
             [disabled]="timeDisabled || disabled || disableMinute" [required]="required">
     </mat-form-field>
 
     <mat-form-field *ngIf="!hideSeconds" class="seconds-input">
         <span matPrefix>:</span>
-        <input matInput #secondsInputEnd *ngIf="!hideSeconds" type="number" placeholder="SS"
-            [value]="seconds[prop.control]" (change)="onSecondsChange($event, prop.control)" min="-1" max="60"
+        <input matInput *ngIf="!hideSeconds" type="number" placeholder="SS" [ngModel]="seconds[prop.control]"
+            (change)="onSecondsChange($event, prop.control)" min="-1" max="60"
             [disabled]="timeDisabled || disabled || disableSeconds" [required]="required">
     </mat-form-field>
 
     <mat-form-field *ngIf="!hideMeridian" class="meridian-input">
-        <input matInput #meridianInputEnd [value]="meridian[prop.control]" [placeholder]="meridian[prop.control]"
+        <input matInput [ngModel]="meridian[prop.control]" [placeholder]="meridian[prop.control]"
             (keydown)="onMeridianChange($event, prop.control)" [disabled]="timeDisabled || disabled || disableMeridian"
             [required]="required">
         <mat-icon id="{{'meridian' + prop.control}}" (click)="onMeridianChange($event, prop.control)" matSuffix

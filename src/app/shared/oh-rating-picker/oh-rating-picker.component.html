@@ -1,8 +1,19 @@
-<div class="oh-rating-picker-wrapper">
-    <div class="oh-rating-star-wrapper {{orientation}}">
-        <mat-icon *ngFor="let s of stars;" class="oh-star" (mouseenter)="onStarHover(s)" (click)="onStarClick(s)"
-            matTooltip="{{tempValue}}" [ngStyle]="{'color': s.color}">
-            {{s.icon}}
-        </mat-icon>
+<ng-container *ngIf="ratingType == 'mat-icon'">
+    <div class="oh-rating-wrapper">
+        <div class="oh-rating-icon {{orientation}}">
+            <mat-icon *ngFor="let s of stars;" class="oh-star" (mouseenter)="onStarHover(s)" (click)="onStarClick(s)"
+                matTooltip="{{tempValue}}" [ngStyle]="{'color': s.color}">
+                {{s.icon}}
+            </mat-icon>
+        </div>
     </div>
-</div>
+</ng-container>
+
+<ng-container *ngIf="ratingType == 'css'">
+    <div class="oh-rating {{orientation}}">
+        <ng-container *ngFor="let r of ratings">
+            <input type="radio" [name]="r" value="{{r}}" [checked]="tempValue === r" />
+            <label matTooltip="{{r}}" (click)='onCssStarClick(r)'></label>
+        </ng-container>
+    </div>
+</ng-container>

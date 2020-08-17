@@ -11,6 +11,7 @@ export class OHRatingPickerComponent implements OnInit {
 
   @Output() valueChange = new EventEmitter<any>();
 
+  ratings: number[] = [];
   starsCount: number;
   tempValue: number;
   defaultValue: number;
@@ -23,6 +24,7 @@ export class OHRatingPickerComponent implements OnInit {
   fullRatingIcon: string;
   halfRatingIcon: string;
   emptyRatingIcon: string;
+  ratingType: string;
 
   stars: MvStarsConfig[];
 
@@ -31,6 +33,7 @@ export class OHRatingPickerComponent implements OnInit {
     if (prop) {
 
       this.stars = [];
+      this.ratings = [];
       this.starsCount = prop.starsCount != null ? prop.starsCount : 6;
       this.defaultValue = prop.defaultValue != null ? prop.defaultValue : 0;
       this.tempValue = prop.defaultValue != null ? prop.defaultValue : 0;
@@ -42,8 +45,18 @@ export class OHRatingPickerComponent implements OnInit {
       this.fullRatingIcon = prop.fullRatingIcon != null ? prop.fullRatingIcon : 'star';
       this.halfRatingIcon = prop.halfRatingIcon != null ? prop.halfRatingIcon : 'star_half';
       this.emptyRatingIcon = prop.emptyRatingIcon != null ? prop.emptyRatingIcon : 'star_bordered';
+      this.ratingType = prop.ratingType != null ? prop.ratingType : 'mat-icon';
 
-      this.reDrawStars();
+      if (this.ratingType === 'mat-icon') {
+
+        this.reDrawStars();
+      } else {
+
+        for (let i = this.starsCount; i >= 1; i--) {
+          this.ratings.push(i);
+        }
+      }
+
       this.valueChange.emit(this.defaultValue);
     }
   }
@@ -51,7 +64,7 @@ export class OHRatingPickerComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
 
   }
 
@@ -179,6 +192,12 @@ export class OHRatingPickerComponent implements OnInit {
       }
     }
   }
+
+  onCssStarClick(rating: number) {
+
+    this.tempValue = rating;
+    this.valueChange.emit(this.tempValue);
+  }
 }
 
 export interface MvPickerConfig {
@@ -191,6 +210,7 @@ export interface MvPickerConfig {
   fullRatingIcon: string;
   halfRatingIcon: string;
   emptyRatingIcon: string;
+  ratingType: string;
 }
 
 export interface MvStarsConfig {
