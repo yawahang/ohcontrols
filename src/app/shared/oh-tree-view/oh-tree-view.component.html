@@ -1,82 +1,89 @@
-<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign="start center">
-    <div fxFlex="40" class="filter-buttons">
-        <mat-button-toggle-group #group="matButtonToggleGroup" appearance="legacy" value="all">
+<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign="start center"
+    class="action-wrapper">
+    <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center" fxFlex="calc(100% - 10px)">
 
-            <mat-button-toggle value="expandAll" (click)="toggleNode(expanded ? 'collapseAll' : 'expandAll')">
-                <mat-icon matTooltip="{{ expanded ? 'Collapse All' : 'Expand All'}}">
-                    {{ expanded ? 'expand_more' : 'chevron_right'}}</mat-icon>
-            </mat-button-toggle>
+        <div fxLayout.xs="column" fxLayout.md="column" class="action-node">
+            <mat-icon [matMenuTriggerFor]="menuFilter" matTooltip="{{ 'Actions' }}">more_vert</mat-icon>
+            <mat-menu #menuFilter="matMenu">
+                <button mat-menu-item matTooltip="{{ expanded ? 'Collapse All' : 'Expand All' }}"
+                    (click)="toggleNode(expanded ? 'collapseAll' : 'expandAll')">
+                    <mat-icon>{{expanded ? 'chevron_right' : 'expand_more'}}</mat-icon>
+                    <span>{{ expanded ? 'Collapse All' : 'Expand All' }}</span>
+                </button>
+                <button mat-menu-item matTooltip="{{ 'Show All' }}" (click)="toggleNode('all')">
+                    <mat-icon>done_all</mat-icon>
+                    <span>{{ 'Show All' }}</span>
+                </button>
+                <button mat-menu-item matTooltip="{{ 'Show Checked' }}" (click)="toggleNode('checked')">
+                    <mat-icon>check_box</mat-icon>
+                    <span>{{ 'Show Checked' }}</span>
+                </button>
+                <button mat-menu-item matTooltip="{{ 'Show UnChecked' }}" (click)="toggleNode('unchecked')">
+                    <mat-icon>check_box_outline_blank</mat-icon>
+                    <span>{{ 'Show UnChecked' }}</span>
+                </button>
+            </mat-menu>
+        </div>
 
-            <mat-button-toggle disabled value="checkAll">
-                <mat-checkbox class="check-all" [checked]="checkedAll" [indeterminate]="indeterminate"
-                    matTooltip="{{ checkedAll ? 'UnCheck All' : 'Check All'}}" (change)="checkAll($event)">Check All
-                </mat-checkbox>
-            </mat-button-toggle>
+        <div fxLayout.xs="column" fxLayout.md="column" class="check-all">
+            <mat-checkbox [checked]="checkedAll" [indeterminate]="indeterminate"
+                matTooltip="{{ checkedAll ? 'UnCheck All' : 'Check All'}}" (change)="checkAll($event)">
+                {{ 'Check All' }}
+            </mat-checkbox>
+        </div>
 
-            <mat-button-toggle value="all" (click)="toggleNode('all')">
-                <mat-icon matTooltip="All">done_all</mat-icon>
-            </mat-button-toggle>
-
-            <mat-button-toggle value="checked" (click)="toggleNode('checked')">
-                <mat-icon matTooltip="Checked">check_box</mat-icon>
-            </mat-button-toggle>
-
-            <mat-button-toggle value="unchecked" (click)="toggleNode('unchecked')">
-                <mat-icon matTooltip="Unchecked">check_box_outline_blank</mat-icon>
-            </mat-button-toggle>
-
-            <mat-button-toggle *ngIf="searchable" disabled value="search" class="search-node">
-                <input #searchInput type="text" class="node-search" placeholder="Search"
-                    (change)="searchNode($event)" />
-                <mat-icon *ngIf="this.searchText != null && this.searchText !== ''" matTooltip="Clear"
+        <div *ngIf="searchable" fxLayout.xs="column" fxLayout.md="column" class="search-node">
+            <mat-form-field class="h-44">
+                <input #searchInput matInput type="text" placeholder="{{ 'Search' }}" (change)="searchNode($event)" />
+                <mat-icon *ngIf="searchText != null && searchText !== ''" matTooltip="{{ 'Clear' }}"
                     (click)="clearSearch()">close</mat-icon>
-            </mat-button-toggle>
-
-        </mat-button-toggle-group>
-    </div>
-    <div fxFlex="60" fxHide fxShow.gt-sm>
+            </mat-form-field>
+        </div>
 
     </div>
 </div>
 
 <div class="oh-tree-wrapper">
-    <ul *ngFor="let node of rootNode; trackBy: trackIndex" class="oh-tree">
-        <li [ngClass]="(node.visible && node.searched) ? 'show-node' : 'hide-node'">
 
-            <mat-icon *ngIf="hasChild(node)" [ngClass]="(node.visible && node.searched) ? 'show-node' : 'hide-node'"
-                (click)="openCloseNode(node)">
-                {{ node.expanded ? 'expand_more' : 'chevron_right'}}
+    <ul *ngFor="let parent of rootNode; trackBy: trackIndex" class="oh-tree">
+        <li [ngClass]="(parent.visible && parent.searched) ? 'show-node' : 'hide-node'">
+
+            <mat-icon *ngIf="(parent.child && parent.child.length > 0)"
+                [ngClass]="(parent.visible && parent.searched) ? 'show-node' : 'hide-node'"
+                (click)="openCloseNode(parent)">
+                {{ parent.expanded ? 'expand_more' : 'chevron_right'}}
             </mat-icon>
 
-            <mat-checkbox *ngIf="(node.visible && node.searched)" [checked]="node.checked"
-                [indeterminate]="node.indeterminate" [disabled]="node.disabled" (change)="onCheckChange(node)">
-                {{node.node}}
+            <mat-checkbox [checked]="parent.checked" [indeterminate]="parent.indeterminate" [disabled]="parent.disabled"
+                (change)="onCheckChange(parent)">
+                {{parent.node}}
             </mat-checkbox>
 
-            <ul *ngIf="getNode(node.nodeId,'parentNodeId')" class="collapsible-node"
-                [ngClass]="node.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
-                <ng-container *ngTemplateOutlet="recursiveNode; context: { $implicit: node }"></ng-container>
+            <ul *ngIf="(parent.child && parent.child.length > 0)" class="collapsible-node"
+                [ngClass]="parent.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
+                <ng-container *ngTemplateOutlet="recursiveNode; context: { $implicit: parent.child }">
+                </ng-container>
             </ul>
         </li>
     </ul>
 
-    <ng-template #recursiveNode let-node>
-        <li *ngFor="let child of getNode(node.nodeId,'parentNodeId'); trackBy: trackIndex"
-            [ngClass]="(child.visible && child.searched) ? 'show-node ' : 'hide-node'">
+    <ng-template #recursiveNode let-child>
+        <li *ngFor="let ch of child; trackBy: trackIndex"
+            [ngClass]="(ch.visible && ch.searched) ? 'show-node ' : 'hide-node'">
 
-            <mat-icon *ngIf="hasChild(child)" [ngClass]="(child.visible && child.searched) ? 'show-node ' : 'hide-node'"
-                (click)="openCloseNode(child)">
-                {{child.expanded ? 'expand_more' : 'chevron_right'}}
+            <mat-icon *ngIf="(ch.child && ch.child.length > 0)"
+                [ngClass]="(ch.visible && ch.searched) ? 'show-node ' : 'hide-node'" (click)="openCloseNode(ch)">
+                {{ch.expanded ? 'expand_more' : 'chevron_right'}}
             </mat-icon>
 
-            <mat-checkbox *ngIf="(node.visible && node.searched)" [checked]="child.checked"
-                [indeterminate]="child.indeterminate" [disabled]="child.disabled" (change)="onCheckChange(child)">
-                {{child.node}}
+            <mat-checkbox [checked]="ch.checked" [indeterminate]="ch.indeterminate" [disabled]="ch.disabled"
+                (change)="onCheckChange(ch)">
+                {{ch.node}}
             </mat-checkbox>
 
-            <ul *ngIf="getNode(child.nodeId,'parentNodeId')" class="collapsible-node"
-                [ngClass]="child.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
-                <ng-container *ngTemplateOutlet="recursiveNode; context: { $implicit: child }">
+            <ul *ngIf="(ch.child && ch.child.length > 0)" class="collapsible-node"
+                [ngClass]="ch.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
+                <ng-container *ngTemplateOutlet="recursiveNode; context: { $implicit: ch.child }">
                 </ng-container>
             </ul>
         </li>
