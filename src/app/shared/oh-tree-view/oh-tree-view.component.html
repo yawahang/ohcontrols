@@ -60,7 +60,7 @@
             </mat-checkbox>
 
             <ul *ngIf="(parent.child && parent.child.length > 0)" class="collapsible-node"
-                [ngClass]="parent.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
+                [ngClass]="parent.expanded ? 'show-node' : 'hide-node'">
                 <ng-container *ngTemplateOutlet="recursiveNode; context: { $implicit: parent.child }">
                 </ng-container>
             </ul>
@@ -82,7 +82,7 @@
             </mat-checkbox>
 
             <ul *ngIf="(ch.child && ch.child.length > 0)" class="collapsible-node"
-                [ngClass]="ch.expanded ? 'toggle-node-show' : 'toggle-node-hide'">
+                [ngClass]="ch.expanded ? 'show-node' : 'hide-node'">
                 <ng-container *ngTemplateOutlet="recursiveNode; context: { $implicit: ch.child }">
                 </ng-container>
             </ul>
