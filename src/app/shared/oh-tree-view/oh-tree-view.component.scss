@@ -6,12 +6,18 @@ oh-tree-view {
       font-family: "Courier New", Courier, monospace;
  
       .search-node {
+        position: relative;
+
+        .mat-form-field {
+          width: 100%;
+        }
       
         .mat-icon {
           cursor: pointer;
-          font-size: 14px !important;
-          margin-left: -18px;
-          margin-bottom: -12px;
+          font-size: 15px !important;
+          position: absolute;
+          right: 0;
+          top: -10px;
         }
       }
 
@@ -36,7 +42,7 @@ oh-tree-view {
             }
           }
         }
-    } 
+    }
   
   .oh-tree-wrapper {
 
