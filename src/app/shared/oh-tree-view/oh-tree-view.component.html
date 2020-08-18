@@ -34,7 +34,7 @@
 
         <div *ngIf="searchable" fxLayout.xs="column" fxLayout.md="column" class="search-node">
             <mat-form-field class="h-44">
-                <input #searchInput matInput type="text" placeholder="{{ 'Search' }}" (change)="searchNode($event)" />
+                <input #searchInput matInput type="text" placeholder="{{ 'Search' }}" (keydown)="searchNode($event)" />
                 <mat-icon *ngIf="searchText != null && searchText !== ''" matTooltip="{{ 'Clear' }}"
                     (click)="clearSearch()">close</mat-icon>
             </mat-form-field>
