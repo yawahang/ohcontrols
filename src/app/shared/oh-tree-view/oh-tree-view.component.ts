@@ -365,16 +365,16 @@ export class OHTreeViewComponent implements OnInit, OnDestroy {
 }
 
 export interface MvTree {
-  node: string;
   nodeId: number;
+  node: string;
   parentNodeId: number;
   checked: boolean;
-  searchable: boolean;
-  searched: boolean;
-  visible: boolean;
-  indeterminate: boolean;
-  expanded: boolean;
-  disabled: boolean;
+  visible: boolean | true; // optional, send false if a node needs to be hidden
+  disabled: boolean | false; // optional, send true if a node needs to be hidden
+  // below properties need not to be send as data
+  searched: boolean | true;
+  expanded: boolean | true;
+  indeterminate: boolean | false;
   child?: MvTree[];
 }
 
