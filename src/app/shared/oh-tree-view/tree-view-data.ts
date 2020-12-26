@@ -72,9 +72,41 @@ export const treeViewData = [
         "visible": true
     },
     {
+        "nodeId": 122,
+        "node": "Strawberry Child 1",
+        "parentNodeId": 9,
+        "checked": true,
+        "disabled": false,
+        "visible": true
+    },
+    {
+        "nodeId": 123,
+        "node": "Strawberry Child 2",
+        "parentNodeId": 9,
+        "checked": true,
+        "disabled": false,
+        "visible": true
+    },
+    {
         "nodeId": 10,
         "node": "Cranberry",
         "parentNodeId": 8,
+        "checked": false,
+        "disabled": false,
+        "visible": true
+    },
+    {
+        "nodeId": 124,
+        "node": "Cranberry Child 1",
+        "parentNodeId": 10,
+        "checked": false,
+        "disabled": false,
+        "visible": true
+    },
+    {
+        "nodeId": 125,
+        "node": "Cranberry Child 2",
+        "parentNodeId": 10,
         "checked": false,
         "disabled": false,
         "visible": true

@@ -1,7 +1,7 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   MatToolbarModule, MatIconModule,
-  MatButtonToggleModule, MatCheckboxModule, MatTooltipModule
+  MatCheckboxModule, MatTooltipModule, MatInputModule, MatMenuModule, MatButtonModule
 } from '@angular/material';
 import { OHTreeViewComponent } from './oh-tree-view.component';
 import { CommonModule } from '@angular/common';
@@ -16,9 +16,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FlexLayoutModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonToggleModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatInputModule,
+    MatMenuModule,
+    MatButtonModule
   ],
   exports: [OHTreeViewComponent],
   schemas: [NO_ERRORS_SCHEMA]

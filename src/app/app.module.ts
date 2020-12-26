@@ -17,7 +17,6 @@ import {
 
 import { OHTreeViewModule } from './shared/oh-tree-view/oh-tree-view.module';
 import { OHRatingPickerModule } from './shared/oh-rating-picker/oh-rating-picker.module';
-
 @NgModule({
   declarations: [
     AppComponent,
